@@ -1,10 +1,6 @@
 import openai
-#	https://api.openai.com/v1/chat/completions
-#   https://api.openai.com/v1/completions
-# API= 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
-# API= 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
 # Set up your OpenAI API key
-openai.api_key = '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'
+openai.api_key = #'OpenAI API Key here'
 
 # Define a function to generate a response from the ChatGPT model
 def generate_response(prompt):
