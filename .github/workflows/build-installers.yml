@@ -1,0 +1,42 @@
+name: Build Windows and Parrot OS installers
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            target: win
+          - os: ubuntu-24.04
+            target: linux
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Type check
+        run: npm run typecheck
+      - name: Test
+        run: npm test
+      - name: Package
+        run: npm run package:${{ matrix.target }}
+      - name: Upload installers
+        uses: actions/upload-artifact@v4
+        with:
+          name: openforge-${{ matrix.target }}-${{ github.run_number }}
+          path: release/*
+          if-no-files-found: error
