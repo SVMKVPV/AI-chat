@@ -15,7 +15,8 @@
     "test:watch": "vitest",
     "icon": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/make-icon.ps1",
     "package:win": "npm run icon && npm run build && electron-builder --win nsis --x64",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "package:linux": "npm run build && electron-builder --linux deb AppImage --x64"
   },
   "dependencies": {},
   "devDependencies": {
@@ -38,7 +39,7 @@
   "build": {
     "appId": "dev.openforge.launcher",
     "productName": "OpenForge AI",
-    "artifactName": "OpenForge-AI-Setup-${version}-${arch}.${ext}",
+    "artifactName": "OpenForge-AI-${version}-${os}-${arch}.${ext}",
     "asar": true,
     "electronFuses": {
       "runAsNode": false,
@@ -51,7 +52,7 @@
       "grantFileProtocolExtraPrivileges": true
     },
     "directories": {
-      "output": "../../outputs"
+      "output": "release"
     },
     "files": [
       "dist/**/*",
@@ -78,6 +79,25 @@
       "createStartMenuShortcut": true,
       "shortcutName": "OpenForge AI",
       "deleteAppDataOnUninstall": false
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "deb",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "category": "Development",
+      "icon": "build/icon.png",
+      "maintainer": "OpenForge AI"
     }
   }
 }
